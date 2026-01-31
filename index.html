@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prasadu's Image Converter - Free & Private</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖼️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+  <header class="header vibrant-header">
+    <div class="logo">
+      <img src="conversion-logo.svg" alt="Conversion Logo" class="logo-icon">
+      <div class="logo-text-wrapper">
+        <span class="logo-main">Prasadu's Image Converter</span>
+        <span class="logo-sub">Free & Fast</span>
+      </div>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <h1>Prasadu's Image Converter</h1>
+    <p class="subtitle">Convert JPEG, PNG, GIF & more to WebP, AVIF, JPEG, PNG, GIF. Resize, compress, batch convert – 100% in your browser, no upload, private & unlimited!</p>
+
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      <div class="upload-content">
+        <div class="upload-icon">⬇</div>
+        <p>Drop your images here (multiple OK) or click to select</p>
+        <small>Quality & resize adjustable below (default 80% quality, 100% size)</small>
+      </div>
+    </div>
+
+    <div id="statusMessage" class="status-message"></div>
+
+    <div class="controls">
+      <label>Quality (0–1):</label>
+      <input type="number" id="quality" min="0" max="1" step="0.05" value="0.8">
+      <label>Resize (%):</label>
+      <input type="number" id="resizePercent" min="10" max="500" step="10" value="100">
+      <label>Format:</label>
+      <select id="outputFormat">
+        <option value="webp">WebP</option>
+        <option value="avif">AVIF</option>
+        <option value="jpeg">JPEG</option>
+        <option value="png">PNG</option>
+        <option value="gif">GIF</option>
+      </select>
+      <button id="darkModeToggle" class="toggle-btn">🌙 Dark Mode</button>
+    </div>
+
+    <button id="convertBtn" class="primary-btn" disabled>Convert Files</button>
+
+    <div id="loadingSpinner" class="spinner" style="display:none;">
+      <div class="spinner-circle"></div>
+      <p>Preparing files...</p>
+    </div>
+
+    <div id="result" class="result-area" style="display:none;">
+      <h3>Conversion Complete! 🎉</h3>
+      <div id="progressContainer" class="progress-container">
+        <p id="progressText">Converting files... 0%</p>
+        <progress id="progressBar" value="0" max="100"></progress>
+      </div>
+      <div id="previewsContainer" class="previews-container"></div>
+      <button id="downloadAllBtn" class="primary-btn">Download All as ZIP</button>
+      <p id="totalSavings" class="savings-text"></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Prasadu's Free Tools | Made with ❤️ in Arikirevula</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

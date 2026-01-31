@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="64" height="64">
+  <!-- Subtle background circle -->
+  <circle cx="256" cy="256" r="240" fill="#f8f9fa" opacity="0.7"/>
+  
+  <!-- Left arrow (original file coming in) -->
+  <path d="M100 256 L210 256 L210 186 L290 256 L210 326 L210 256"
+        fill="none" stroke="#28a745" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Right arrow (converted file going out) -->
+  <path d="M412 256 L302 256 L302 326 L222 256 L302 186 L302 256"
+        fill="none" stroke="#2c7be5" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Center connection dot -->
+  <circle cx="256" cy="256" r="38" fill="#ffffff" stroke="#495057" stroke-width="10"/>
+</svg>
