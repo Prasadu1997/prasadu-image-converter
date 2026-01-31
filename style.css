@@ -368,3 +368,75 @@ footer {
   border-top: 1px solid #dee2e6;
   margin-top: 80px;
 }
+.get-app-section {
+  margin: 60px auto;
+  max-width: 600px;
+  padding: 30px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.app-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.app-btn {
+  padding: 12px 28px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+
+.app-btn:hover {
+  background: #218838;
+}
+
+.app-icon {
+  fill: white;
+}
+.get-app {
+  margin: 60px auto;
+  max-width: 600px;
+  padding: 30px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.app-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.app-btn {
+  padding: 12px 28px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-btn img {
+  width: 24px;
+  height: 24px;
+}
