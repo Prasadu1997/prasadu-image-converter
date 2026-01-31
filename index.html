@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prasadu's Image Converter - Free & Private</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖼️</text></svg>">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#28a745">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,8 +18,10 @@
   <header class="header vibrant-header">
     <div class="logo">
       <img src="conversion-logo.svg" alt="Conversion Logo" class="logo-icon">
-      <span class="logo-text">Prasadu's Image Converter</span>
-      <span class="logo-sub">Free & Fast</span>
+      <div class="logo-text-wrapper">
+        <span class="logo-main">Prasadu's Image Converter</span>
+        <span class="logo-sub">Free & Fast</span>
+      </div>
     </div>
     <nav>
       <a href="index.html">Home</a>
@@ -42,22 +45,28 @@
     <div id="statusMessage" class="status-message"></div>
 
     <div class="controls">
-      <label>Quality (0–1): </label>
-      <input type="number" id="quality" min="0" max="1" step="0.05" value="0.8">
-      <label>Resize (%): </label>
-      <input type="number" id="resizePercent" min="10" max="500" step="10" value="100">
-      <label>Format: </label>
-      <select id="outputFormat">
-        <option value="webp">WebP</option>
-        <option value="avif">AVIF</option>
-        <option value="jpeg">JPEG</option>
-        <option value="png">PNG</option>
-        <option value="gif">GIF</option>
-      </select>
+      <div class="control-group">
+        <label>Quality (0–1):</label>
+        <input type="number" id="quality" min="0" max="1" step="0.05" value="0.8">
+      </div>
+      <div class="control-group">
+        <label>Resize (%):</label>
+        <input type="number" id="resizePercent" min="10" max="500" step="10" value="100">
+      </div>
+      <div class="control-group">
+        <label>Format:</label>
+        <select id="outputFormat">
+          <option value="webp">WebP</option>
+          <option value="avif">AVIF</option>
+          <option value="jpeg">JPEG</option>
+          <option value="png">PNG</option>
+          <option value="gif">GIF</option>
+        </select>
+      </div>
       <button id="darkModeToggle" class="toggle-btn">🌙 Dark Mode</button>
     </div>
 
-    <button id="convertBtn" class="primary-btn" disabled>Convert to WebP</button>
+    <button id="convertBtn" class="primary-btn" disabled>Convert Files</button>
 
     <div id="loadingSpinner" class="spinner" style="display:none;">
       <div class="spinner-circle"></div>
@@ -75,28 +84,20 @@
       <p id="totalSavings" class="savings-text"></p>
     </div>
 
-    <!-- New: Get App section with Android/iOS icons -->
-    <section class="get-app-section">
-      <h2>Get the App</h2>
-      <p class="subtitle">Install as an app on your phone for offline use!</p>
-      <div class="app-buttons">
-        <button id="androidInstall" class="app-btn">
-          <svg viewBox="0 0 24 24" width="24" height="24" class="app-icon">
-            <path d="M0 0h24v24H0V0z" fill="none"/>
-            <path d="M17.09 3.5l.91-.91-1.41-1.41-.91.91C13.74 1.09 12.88 1 12 1s-1.74.09-2.59.27l-.91-.91L7.09 1.77l.91.91C6.09 3.52 5 5.22 5 7h14c0-1.78-1.09-3.48-2.91-4.5zM5 9v10h14V9H5zm7 9c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="#34a853"/>
-          </svg>
-          Android
-        </button>
-        <button id="iosInstall" class="app-btn">
-          <svg viewBox="0 0 24 24" width="24" height="24" class="app-icon">
-            <path d="M0 0h24v24H0V0z" fill="none"/>
-            <path d="M12.98 12.89l-1.45 1.52c-.2.21-.55.21-.75 0-.2-.21-.2-.55 0-.76l.96-1.01c.39-.41 1.04-.41 1.43 0l.96 1.01c.2.21.2.55 0 .76-.2.21-.55.21-.75 0l-1.45-1.52zm.02-4.95l4.9-5.15c.2-.21.55-.21.75 0 .2.21.2.55 0 .76l-4.9 5.15c-.2.21-.55.21-.75 0l-4.9-5.15c-.2-.21-.2-.55 0-.76.2-.21.55-.21.75 0l4.9 5.15z" fill="#4285f4"/>
-          </svg>
-          iOS
-        </button>
-      </div>
-      <p id="installInstruction" class="subtitle" style="display:none;">Tap the button for your device to install.</p>
-    </section>
+    <!-- Get App Section – professional look with official badges -->
+<section class="get-app-section">
+  <h2>Install as App</h2>
+  <p>Works offline after install – like a real app on your phone!</p>
+  <div class="app-store-buttons">
+    <button id="androidInstall" class="store-btn google-play">
+      <img src="https://developer.android.com/static/images/brand/Get_it_on_Google_play.svg" alt="Get it on Google Play" class="badge-img">
+    </button>
+    <button id="iosInstall" class="store-btn app-store">
+      <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" class="badge-img">
+    </button>
+  </div>
+  <p class="install-info">Tap your device button to install or add to home screen.</p>
+</section>
   </main>
 
   <footer>
@@ -104,37 +105,38 @@
   </footer>
 
   <script src="script.js"></script>
-  <!-- PWA script -->
+  <!-- PWA Install Script -->
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    });
+  }
+
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Optional: show a custom banner or enable button
+  });
+
+  document.getElementById('androidInstall').addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('User response to install prompt:', outcome);
+      deferredPrompt = null;
+    } else {
+      // Fallback for browsers without prompt
+      alert('To install on Android:\n1. Tap the 3-dot menu in Chrome\n2. Choose "Add to home screen" or "Install app"');
     }
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installInstruction').style.display = 'block';
-    });
-    document.getElementById('androidInstall').addEventListener('click', () => {
-      if (deferredPrompt) deferredPrompt.prompt();
-    });
-    document.getElementById('iosInstall').addEventListener('click', () => {
-      alert('On iOS, open in Safari → Tap Share → Add to Home Screen');
-    });
-  </script>
-  <section class="get-app">
-  <h2>Install as App</h2>
-  <p>Works offline after install – like a real app on your phone!</p>
-  <div class="app-buttons">
-    <button class="app-btn android">
-      <img src="https://img.icons8.com/color/48/000000/android-os.png" alt="Android" width="24"/>
-      Android
-    </button>
-    <button class="app-btn ios">
-      <img src="https://img.icons8.com/color/48/000000/apple-logo.png" alt="iOS" width="24"/>
-      iOS
-    </button>
-  </div>
-</section>
+  });
+
+  document.getElementById('iosInstall').addEventListener('click', () => {
+    alert('On iOS:\n1. Open in Safari\n2. Tap the Share icon (square with arrow up)\n3. Scroll and tap "Add to Home Screen"\n4. Tap "Add"');
+  });
+</script>
 </body>
 </html>

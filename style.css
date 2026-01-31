@@ -25,28 +25,6 @@ body.dark-mode .savings-text { color: #28a745; }
 body.dark-mode .status-success { background: #155724; color: #d4edda; border-color: #28a745; }
 body.dark-mode footer { color: #adb5bd; border-top-color: #495057; }
 
-@media (max-width: 768px) {
-  .main-container { padding: 0 15px; margin: 40px auto; }
-  h1 { font-size: 2.2rem; }
-  .subtitle { font-size: 1rem; }
-  .upload-zone { padding: 50px 15px; }
-  .controls { flex-direction: column; gap: 15px; }
-  .primary-btn { padding: 14px 40px; font-size: 1.1rem; }
-  .previews-container { grid-template-columns: 1fr; }
-  .preview-item img { max-height: 180px; }
-  .images-row { flex-direction: column; gap: 20px; }
-  .converted-wrapper { margin-top: 20px; }
-}
-
-@media (max-width: 480px) {
-  .header { padding: 15px 20px; flex-direction: column; gap: 10px; text-align: center; }
-  .logo { flex-direction: column; }
-  .logo-icon { width: 64px; height: 64px; margin: 0 auto 8px; }
-  .logo-text-wrapper { text-align: center; }
-  nav a { margin: 0 10px; font-size: 0.9rem; }
-  footer { padding: 20px; font-size: 0.9rem; }
-}
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -60,12 +38,12 @@ body.dark-mode footer { color: #adb5bd; border-top-color: #495057; }
 .logo {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .logo-icon {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
 }
 
 .logo-text-wrapper {
@@ -74,13 +52,13 @@ body.dark-mode footer { color: #adb5bd; border-top-color: #495057; }
 }
 
 .logo-main {
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 700;
   line-height: 1.1;
 }
 
 .logo-sub {
-  font-size: 1rem;
+  font-size: 0.95rem;
   opacity: 0.95;
 }
 
@@ -96,39 +74,29 @@ nav a:hover { color: #fffacd; }
 
 .main-container {
   max-width: 1100px;
-  margin: 60px auto;
+  margin: 40px auto;
   padding: 0 20px;
   text-align: center;
 }
 
-h1 { font-size: 2.8rem; margin-bottom: 12px; color: #212529; }
+h1 { font-size: 2.6rem; margin-bottom: 12px; color: #212529; }
 
-.subtitle { font-size: 1.2rem; color: #6c757d; margin-bottom: 40px; }
+.subtitle { font-size: 1.15rem; color: #6c757d; margin-bottom: 35px; max-width: 900px; margin-left: auto; margin-right: auto; }
 
 .upload-zone {
   border: 3px dashed #adb5bd;
   border-radius: 16px;
-  padding: 80px 20px;
+  padding: 70px 20px;
   background: white;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 30px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.upload-zone.dragover {
-  border-color: #2c7be5;
-  background: #f0f7ff;
-  box-shadow: 0 0 20px rgba(44,123,229,0.15);
-  animation: pulse-drag 1s infinite;
-}
-
-@keyframes pulse-drag {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
-}
-
-.upload-zone:hover {
+.upload-zone.dragover, .upload-zone:hover {
   border-color: #2c7be5;
   background: #f0f7ff;
   box-shadow: 0 0 20px rgba(44,123,229,0.15);
@@ -136,7 +104,7 @@ h1 { font-size: 2.8rem; margin-bottom: 12px; color: #212529; }
 
 .upload-icon { font-size: 60px; margin-bottom: 20px; color: #2c7be5; }
 
-.upload-content p { font-size: 1.3rem; margin-bottom: 8px; }
+.upload-content p { font-size: 1.25rem; margin-bottom: 8px; }
 
 .controls {
   margin: 30px 0;
@@ -144,18 +112,24 @@ h1 { font-size: 2.8rem; margin-bottom: 12px; color: #212529; }
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 16px 24px;
+  gap: 20px;
   font-size: 1.05rem;
 }
 
-.controls label {
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-group label {
   font-weight: 500;
   white-space: nowrap;
 }
 
-.controls input[type="number"],
-.controls select {
-  width: 90px;
+.control-group input[type="number"],
+.control-group select {
+  width: 100px;
   padding: 9px 12px;
   font-size: 1.05rem;
   border: 1px solid #ced4da;
@@ -368,75 +342,71 @@ footer {
   border-top: 1px solid #dee2e6;
   margin-top: 80px;
 }
+
+/* Get App Section – looks like official app store badges */
 .get-app-section {
   margin: 60px auto;
-  max-width: 600px;
-  padding: 30px;
-  background: white;
+  max-width: 700px;
+  padding: 40px 20px;
+  background: #f8f9fa;
   border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   text-align: center;
 }
 
-.app-buttons {
+.get-app-section h2 {
+  margin-bottom: 12px;
+  font-size: 2rem;
+  color: #212529;
+}
+
+.get-app-section p {
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+.app-store-buttons {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  margin-top: 20px;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.app-btn {
-  padding: 12px 28px;
-  background: #28a745;
-  color: white;
+.store-btn {
+  background: none;
   border: none;
-  border-radius: 30px;
-  font-size: 1.1rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background 0.3s;
+  padding: 0;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
-.app-btn:hover {
-  background: #218838;
+.store-btn:hover {
+  transform: scale(1.08);
+  opacity: 0.9;
 }
 
-.app-icon {
-  fill: white;
-}
-.get-app {
-  margin: 60px auto;
-  max-width: 600px;
-  padding: 30px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  text-align: center;
+.badge-img {
+  width: 200px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.app-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 20px;
+.install-info {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-top: 10px;
 }
 
-.app-btn {
-  padding: 12px 28px;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.app-btn img {
-  width: 24px;
-  height: 24px;
+/* Mobile */
+@media (max-width: 600px) {
+  .app-store-buttons {
+    flex-direction: column;
+    gap: 25px;
+  }
+  .badge-img {
+    width: 180px;
+  }
 }
