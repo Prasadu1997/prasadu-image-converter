@@ -23,7 +23,7 @@
         <span class="logo-sub">Free & Fast</span>
       </div>
     </div>
-    <nav class="nav-links">
+    <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
     </nav>
@@ -31,52 +31,62 @@
 
   <main class="main-container">
     <h1>Prasadu's Image Converter</h1>
-    <p class="subtitle">Convert JPEG, PNG, GIF & more to WebP, AVIF, JPEG, PNG, GIF. Resize, compress, batch convert – 100% in your browser, no upload, private & unlimited!</p>
+    <p class="subtitle">Convert JPEG, PNG, GIF & more to WebP, AVIF, JPEG, PNG, GIF. Resize (custom px), compress, batch – 100% in browser, no upload, private & unlimited!</p>
 
     <div class="upload-zone" id="uploadZone">
       <input type="file" id="fileInput" accept="image/*" multiple hidden>
       <div class="upload-content">
         <div class="upload-icon">⬇</div>
         <p>Drop your images here (multiple OK) or click to select</p>
-        <small>Quality & resize adjustable below (default 80% quality, 100% size)</small>
+        <small>Quality & custom resize (px) adjustable below</small>
       </div>
     </div>
 
     <div id="statusMessage" class="status-message"></div>
 
     <div class="controls">
-      <div class="control-group">
-        <label>Quality (0–1):</label>
-        <input type="number" id="quality" min="0" max="1" step="0.05" value="0.8">
-      </div>
-      <div class="control-group">
-        <label>Resize (%):</label>
-        <input type="number" id="resizePercent" min="10" max="500" step="10" value="100">
-      </div>
-      <div class="control-group">
-        <label>Format:</label>
-        <select id="outputFormat">
-          <option value="webp">WebP</option>
-          <option value="avif">AVIF</option>
-          <option value="jpeg">JPEG</option>
-          <option value="png">PNG</option>
-          <option value="gif">GIF</option>
-        </select>
-      </div>
-      <button id="darkModeToggle" class="toggle-btn">🌙 Dark Mode</button>
+  <div class="control-group">
+    <label>Quality (0–1):</label>
+    <input type="number" id="quality" min="0" max="1" step="0.05" value="0.8">
+  </div>
+
+  <div class="control-group">
+    <label>Format:</label>
+    <select id="outputFormat">
+      <option value="webp">WebP</option>
+      <option value="avif">AVIF</option>
+      <option value="jpeg">JPEG</option>
+      <option value="png">PNG</option>
+      <option value="gif">GIF</option>
+    </select>
+  </div>
+
+  <!-- Width & Height grouped together -->
+  <div class="resize-group">
+    <div class="control-group">
+      <label>Width (px):</label>
+      <input type="number" id="resizeWidth" min="1" placeholder="Original" step="1">
     </div>
+    <div class="control-group">
+      <label>Height (px):</label>
+      <input type="number" id="resizeHeight" min="1" placeholder="Original" step="1">
+    </div>
+  </div>
+
+  <button id="darkModeToggle" class="toggle-btn">🌙 Dark Mode</button>
+</div>
 
     <button id="convertBtn" class="primary-btn" disabled>Convert Files</button>
 
     <div id="loadingSpinner" class="spinner" style="display:none;">
       <div class="spinner-circle"></div>
-      <p>Preparing files...</p>
+      <p>Processing images...</p>
     </div>
 
     <div id="result" class="result-area" style="display:none;">
       <h3>Conversion Complete! 🎉</h3>
       <div id="progressContainer" class="progress-container">
-        <p id="progressText">Converting files... 0%</p>
+        <p id="progressText">Converting... 0%</p>
         <progress id="progressBar" value="0" max="100"></progress>
       </div>
       <div id="previewsContainer" class="previews-container"></div>
@@ -84,27 +94,20 @@
       <p id="totalSavings" class="savings-text"></p>
     </div>
 
-   <!-- Install as App – same size for both badges -->
-<section class="get-app-section">
-  <h2>Install as App</h2>
-  <p>Works offline after install – like a real app on your phone!</p>
-
-  <div class="app-store-buttons">
-    <!-- Google Play – official large badge -->
-    <a href="#" id="androidInstall" class="store-btn">
-      <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" 
-           alt="Get it on Google Play" class="badge-img">
-    </a>
-
-    <!-- App Store – official badge -->
-    <a href="#" id="iosInstall" class="store-btn">
-      <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" 
-           alt="Download on the App Store" class="badge-img">
-    </a>
-  </div>
-
-  <p class="install-info">Tap the button for your device to install or add to home screen.</p>
-</section>
+    <!-- Install as App section -->
+    <section class="get-app-section">
+      <h2>Install as App</h2>
+      <p>Works offline after install – like a real app on your phone!</p>
+      <div class="app-store-buttons">
+        <a href="#" id="androidInstall" class="store-btn">
+          <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="badge-img">
+        </a>
+        <a href="#" id="iosInstall" class="store-btn">
+          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" class="badge-img">
+        </a>
+      </div>
+      <p class="install-info">Tap the button for your device to install or add to home screen.</p>
+    </section>
   </main>
 
   <footer>
@@ -112,35 +115,21 @@
   </footer>
 
   <script src="script.js"></script>
-  <!-- PWA Install Script -->
+  <!-- PWA script -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registered'))
-          .catch(err => console.log('Service Worker registration failed:', err));
-      });
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
     }
-
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
     });
-
-    document.getElementById('androidInstall').addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log('User response to install prompt:', outcome);
-        deferredPrompt = null;
-      } else {
-        alert('To install on Android:\n1. Tap the 3-dot menu in Chrome\n2. Choose "Add to home screen" or "Install app"');
-      }
+    document.getElementById('androidInstall').addEventListener('click', () => {
+      if (deferredPrompt) deferredPrompt.prompt();
     });
-
     document.getElementById('iosInstall').addEventListener('click', () => {
-      alert('On iOS:\n1. Open in Safari\n2. Tap the Share icon (square with arrow up)\n3. Scroll and tap "Add to Home Screen"\n4. Tap "Add"');
+      alert('On iOS: Open in Safari → Tap Share → Add to Home Screen');
     });
   </script>
 </body>

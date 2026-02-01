@@ -434,3 +434,73 @@ footer {
     max-width: 220px;
   }
 }
+/* Controls layout – improved spacing & grouping */
+.controls {
+  margin: 30px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px 30px;
+  font-size: 1.05rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.control-group label {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.control-group input,
+.control-group select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1.05rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* New: Group Width + Height together */
+.resize-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  min-width: 280px;
+}
+
+.resize-group .control-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Mobile – stack everything vertically */
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .resize-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+  .control-group {
+    width: 100%;
+  }
+}
+
+/* Larger screens – keep width/height side by side */
+@media (min-width: 769px) {
+  .resize-group {
+    flex-direction: row;
+  }
+}

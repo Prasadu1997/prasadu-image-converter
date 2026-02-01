@@ -1,21 +1,24 @@
 const fileInput = document.getElementById('fileInput');
-const qualityInput = document.getElementById('quality');
-const resizePercentInput = document.getElementById('resizePercent');
-const outputFormat = document.getElementById('outputFormat');
 const convertBtn = document.getElementById('convertBtn');
+const qualityInput = document.getElementById('quality');
+const resizeWidthInput = document.getElementById('resizeWidth');
+const resizeHeightInput = document.getElementById('resizeHeight');
+const outputFormatSelect = document.getElementById('outputFormat');
 const uploadZone = document.getElementById('uploadZone');
 const statusMessage = document.getElementById('statusMessage');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const resultArea = document.getElementById('result');
-const previewsContainer = document.getElementById('previewsContainer');
 const progressContainer = document.getElementById('progressContainer');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
-const totalSavings = document.getElementById('totalSavings');
+const previewsContainer = document.getElementById('previewsContainer');
 const downloadAllBtn = document.getElementById('downloadAllBtn');
+const totalSavingsEl = document.getElementById('totalSavings');
 const darkModeToggle = document.getElementById('darkModeToggle');
 
-let convertedFiles = [];
+let filesToProcess = [];
+let processedBlobs = [];
+let originalSizes = [];
 
 // Dark Mode Toggle
 darkModeToggle.addEventListener('click', () => {
@@ -23,9 +26,16 @@ darkModeToggle.addEventListener('click', () => {
   darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
 });
 
-// Upload handling
+// Enable/disable convert button
+function updateConvertButton() {
+  convertBtn.disabled = filesToProcess.length === 0;
+}
+
+// File input
+fileInput.addEventListener('change', handleFiles);
 uploadZone.addEventListener('click', () => fileInput.click());
 
+// Drag & drop
 uploadZone.addEventListener('dragover', (e) => {
   e.preventDefault();
   uploadZone.classList.add('dragover');
@@ -34,160 +44,128 @@ uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag
 uploadZone.addEventListener('drop', (e) => {
   e.preventDefault();
   uploadZone.classList.remove('dragover');
-  if (e.dataTransfer.files.length > 0) {
-    fileInput.files = e.dataTransfer.files;
-    handleFiles();
-  }
+  handleFiles(e.dataTransfer.files);
 });
 
-fileInput.addEventListener('change', handleFiles);
-
-function handleFiles() {
-  const files = Array.from(fileInput.files);
-  if (files.length === 0) return;
-
-  const valid = files.filter(f => f.type.startsWith('image/'));
-  if (valid.length === 0) {
-    statusMessage.textContent = "Please select image files only!";
-    statusMessage.className = 'status-message';
-    convertBtn.disabled = true;
-    return;
+function handleFiles(fileList) {
+  filesToProcess = Array.from(fileList);
+  if (filesToProcess.length > 0) {
+    statusMessage.textContent = `${filesToProcess.length} image(s) selected`;
+    statusMessage.className = 'status-message status-success';
+    updateConvertButton();
   }
-
-  statusMessage.textContent = `${valid.length} image${valid.length > 1 ? 's' : ''} loaded successfully! Ready to convert.`;
-  statusMessage.className = 'status-message status-success';
-  convertBtn.disabled = false;
 }
 
+// Convert button click
 convertBtn.addEventListener('click', async () => {
-  const files = Array.from(fileInput.files);
-  if (files.length === 0) return;
+  if (filesToProcess.length === 0) return;
 
   resultArea.style.display = 'none';
   loadingSpinner.style.display = 'block';
   progressContainer.style.display = 'block';
   convertBtn.disabled = true;
-  statusMessage.textContent = `Preparing ${files.length} file${files.length > 1 ? 's' : ''}...`;
+  statusMessage.textContent = 'Processing images...';
 
   previewsContainer.innerHTML = '';
-  convertedFiles = [];
-  let totalOriginal = 0;
-  let totalConverted = 0;
-  let processed = 0;
+  processedBlobs = [];
+  originalSizes = [];
+  let totalOriginalSize = 0;
+  let totalNewSize = 0;
 
   progressBar.value = 0;
-  progressText.textContent = `Converting 0 of ${files.length} files (0%)`;
+  progressText.textContent = '0%';
 
-  for (const file of files) {
-    if (!file.type.startsWith('image/')) continue;
+  const quality = parseFloat(qualityInput.value) || 0.8;
+  const format = outputFormatSelect.value;
+  const width = parseInt(resizeWidthInput.value) || null;
+  const height = parseInt(resizeHeightInput.value) || null;
 
-    const item = document.createElement('div');
-    item.className = 'preview-item';
-    item.innerHTML = `
-      <strong>${file.name}</strong><br>
-      <div class="images-row">
-        <img src="" alt="Original" style="opacity:0.4;">
-        <div class="converted-wrapper">
-          <img src="" alt="Converted" style="opacity:0.4;">
+  for (let i = 0; i < filesToProcess.length; i++) {
+    const file = filesToProcess[i];
+    try {
+      const img = await loadImage(file);
+      const originalSize = file.size;
+      totalOriginalSize += originalSize;
+
+      // Resize canvas
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let newWidth = width || img.width;
+      let newHeight = height || img.height;
+
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      // Convert to blob
+      const blob = await new Promise(resolve => {
+        canvas.toBlob(resolve, `image/${format}`, quality);
+      });
+
+      totalNewSize += blob.size;
+      processedBlobs.push(blob);
+
+      // Show preview
+      const item = document.createElement('div');
+      item.className = 'preview-item';
+      item.innerHTML = `
+        <strong>${file.name}</strong><br>
+        <div class="images-row">
+          <img src="${URL.createObjectURL(file)}" alt="Original">
+          <div class="converted-wrapper">
+            <img src="${URL.createObjectURL(blob)}" alt="Converted">
+            <a href="${URL.createObjectURL(blob)}" class="download-single" download="${file.name.split('.')[0]}.${format}">Download</a>
+          </div>
         </div>
-      </div>
-      <div class="file-progress-container">
-        <div class="file-progress-bar file-progress-indeterminate"></div>
-      </div>
-      <small>Processing...</small>
-    `;
-    previewsContainer.appendChild(item);
+        <small>Original: ${(originalSize / 1024).toFixed(1)} KB → New: ${(blob.size / 1024).toFixed(1)} KB</small>
+      `;
+      previewsContainer.appendChild(item);
 
-    const originalSizeKB = file.size / 1024;
-    totalOriginal += originalSizeKB;
-
-    processed++;
-    const percent = Math.round((processed / files.length) * 100);
-    progressText.textContent = `Converting ${processed} of ${files.length} files (${percent}%)`;
-    progressBar.value = percent;
-
-    const reader = new FileReader();
-    await new Promise(resolve => {
-      reader.onload = (e) => {
-        const imgEl = item.querySelector('img[alt="Original"]');
-        imgEl.src = e.target.result;
-        imgEl.style.opacity = '1';
-
-        const img = new Image();
-        img.onload = () => {
-          const resizePercent = parseFloat(resizePercentInput.value) || 100;
-          const newWidth = Math.round(img.width * (resizePercent / 100));
-          const newHeight = Math.round(img.height * (resizePercent / 100));
-
-          const canvas = document.createElement('canvas');
-          canvas.width = newWidth;
-          canvas.height = newHeight;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-          const quality = parseFloat(qualityInput.value) || 0.8;
-          const format = outputFormat.value;
-          let mime = '';
-          switch (format) {
-            case 'webp': mime = 'image/webp'; break;
-            case 'avif': mime = 'image/avif'; break;
-            case 'jpeg': mime = 'image/jpeg'; break;
-            case 'png': mime = 'image/png'; break;
-            case 'gif': mime = 'image/gif'; break;
-          }
-          const dataUrl = canvas.toDataURL(mime, quality);
-
-          const convertedSizeKB = (dataUrl.length * 3 / 4) / 1024;
-          totalConverted += convertedSizeKB;
-
-          const progBar = item.querySelector('.file-progress-bar');
-          progBar.classList.remove('file-progress-indeterminate');
-          progBar.classList.add('file-complete');
-
-          item.querySelector('small').textContent = `Saved ≈ ${Math.round((1 - convertedSizeKB / originalSizeKB) * 100)}%`;
-
-          const convertedImg = item.querySelector('img[alt="Converted"]');
-          convertedImg.src = dataUrl;
-          convertedImg.style.opacity = '1';
-
-          const dlLink = document.createElement('a');
-          dlLink.href = dataUrl;
-          dlLink.download = file.name.replace(/\.\w+$/i, `.${format}`);
-          dlLink.textContent = `Download ${format.toUpperCase()}`;
-          dlLink.className = 'download-single';
-          item.querySelector('.converted-wrapper').appendChild(dlLink);
-
-          convertedFiles.push({ name: file.name.replace(/\.\w+$/i, `.${format}`), dataUrl });
-
-          resolve();
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
+      // Update progress
+      progressBar.value = ((i + 1) / filesToProcess.length) * 100;
+      progressText.textContent = `${Math.round(progressBar.value)}%`;
+    } catch (err) {
+      console.error(err);
+      statusMessage.textContent = `Error processing ${file.name}`;
+    }
   }
-
-  const savingsPercent = totalOriginal > 0 ? Math.round(((totalOriginal - totalConverted) / totalOriginal) * 100) : 0;
-  totalSavings.textContent = `Total saved ≈ ${savingsPercent}% (${Math.round(totalOriginal)} KB → ${Math.round(totalConverted)} KB)`;
-
-  downloadAllBtn.onclick = async () => {
-    const zip = new JSZip();
-    convertedFiles.forEach(f => {
-      const base64 = f.dataUrl.split(',')[1];
-      zip.file(f.name, base64, {base64: true});
-    });
-    const blob = await zip.generateAsync({type: "blob"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'converted-images.zip';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   loadingSpinner.style.display = 'none';
   resultArea.style.display = 'block';
   progressContainer.style.display = 'none';
-  statusMessage.textContent = "All conversions complete!";
   convertBtn.disabled = false;
+
+  const savings = totalOriginalSize - totalNewSize;
+  const savingsPercent = totalOriginalSize > 0 ? ((savings / totalOriginalSize) * 100).toFixed(1) : 0;
+  totalSavingsEl.textContent = `Saved ${Math.round(savings / 1024)} KB (${savingsPercent}%)`;
+
+  downloadAllBtn.onclick = () => downloadAll(processedBlobs, filesToProcess, format);
 });
+
+// Download all as ZIP
+function downloadAll(blobs, files, format) {
+  const zip = new JSZip();
+  blobs.forEach((blob, i) => {
+    const file = files[i];
+    const name = `${file.name.split('.')[0]}.${format}`;
+    zip.file(name, blob);
+  });
+
+  zip.generateAsync({type:"blob"}).then(content => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(content);
+    link.download = `converted_images.${format === 'jpeg' ? 'zip' : format}`;
+    link.click();
+  });
+}
+
+// Load image helper
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+}
