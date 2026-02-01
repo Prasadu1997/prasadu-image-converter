@@ -15,19 +15,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
- <header class="header vibrant-header">
-  <div class="logo">
-    <img src="conversion-logo.svg" alt="Logo" class="logo-icon">
-    <div class="logo-text-wrapper">
-      <span class="logo-main">Prasadu's Image Converter</span>
-      <span class="logo-sub">Free & Fast</span>
+  <header class="header vibrant-header">
+    <div class="logo">
+      <img src="conversion-logo.svg" alt="Logo" class="logo-icon">
+      <div class="logo-text-wrapper">
+        <span class="logo-main">Prasadu's Image Converter</span>
+        <span class="logo-sub">Free & Fast</span>
+      </div>
     </div>
-  </div>
-  <nav class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-  </nav>
-</header>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
 
   <main class="main-container">
     <h1>Prasadu's Image Converter</h1>
@@ -84,18 +84,25 @@
       <p id="totalSavings" class="savings-text"></p>
     </div>
 
-  <!-- Install as App Section – fixed for mobile -->
+   <!-- Install as App – same size for both badges -->
 <section class="get-app-section">
   <h2>Install as App</h2>
   <p>Works offline after install – like a real app on your phone!</p>
+
   <div class="app-store-buttons">
-    <button id="androidInstall" class="store-btn google-play">
-      <img src="https://developer.android.com/static/images/brand/Get_it_on_Google_play.svg" alt="Get it on Google Play" class="badge-img">
-    </button>
-    <button id="iosInstall" class="store-btn app-store">
-      <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" class="badge-img">
-    </button>
+    <!-- Google Play – official large badge -->
+    <a href="#" id="androidInstall" class="store-btn">
+      <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" 
+           alt="Get it on Google Play" class="badge-img">
+    </a>
+
+    <!-- App Store – official badge -->
+    <a href="#" id="iosInstall" class="store-btn">
+      <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" 
+           alt="Download on the App Store" class="badge-img">
+    </a>
   </div>
+
   <p class="install-info">Tap the button for your device to install or add to home screen.</p>
 </section>
   </main>
@@ -107,36 +114,34 @@
   <script src="script.js"></script>
   <!-- PWA Install Script -->
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Service Worker registered'))
-        .catch(err => console.log('Service Worker registration failed:', err));
-    });
-  }
-
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Optional: show a custom banner or enable button
-  });
-
-  document.getElementById('androidInstall').addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log('User response to install prompt:', outcome);
-      deferredPrompt = null;
-    } else {
-      // Fallback for browsers without prompt
-      alert('To install on Android:\n1. Tap the 3-dot menu in Chrome\n2. Choose "Add to home screen" or "Install app"');
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
     }
-  });
 
-  document.getElementById('iosInstall').addEventListener('click', () => {
-    alert('On iOS:\n1. Open in Safari\n2. Tap the Share icon (square with arrow up)\n3. Scroll and tap "Add to Home Screen"\n4. Tap "Add"');
-  });
-</script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    document.getElementById('androidInstall').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('User response to install prompt:', outcome);
+        deferredPrompt = null;
+      } else {
+        alert('To install on Android:\n1. Tap the 3-dot menu in Chrome\n2. Choose "Add to home screen" or "Install app"');
+      }
+    });
+
+    document.getElementById('iosInstall').addEventListener('click', () => {
+      alert('On iOS:\n1. Open in Safari\n2. Tap the Share icon (square with arrow up)\n3. Scroll and tap "Add to Home Screen"\n4. Tap "Add"');
+    });
+  </script>
 </body>
 </html>
